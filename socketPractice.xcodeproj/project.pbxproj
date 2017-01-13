@@ -16,7 +16,9 @@
 		6BE649DE1EF488A27FDB2901 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BE6491107F69D17FF2CBA5E /* AppDelegate.m */; };
 		6BE64A9A3F3A624DBAE3A3CB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BE642BDAC3D26BFD2C667D9 /* ViewController.m */; };
 		6BE64AEED29C06237B9B2B02 /* socketPracticeUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BE64522AE791DEAA44AFB55 /* socketPracticeUITests.m */; };
+		6BE64B1A7AC3A9C103E3EDD2 /* TYHSocketManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BE64732B22A9F9683310BBE /* TYHSocketManager.m */; };
 		6BE64C95149B9B1BDDFBD349 /* socketPracticeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BE641141389660CA9B9411E /* socketPracticeTests.m */; };
+		6BE64CCC4C0AE18CE8BEED1B /* TYHSocketManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BE64732B22A9F9683310BBE /* TYHSocketManager.m */; };
 		6BE64FD1B3D4F0CF095DCC26 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6BE64CED0FB3A96E34D658E7 /* Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -48,9 +50,11 @@
 		6BE64522AE791DEAA44AFB55 /* socketPracticeUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = socketPracticeUITests.m; sourceTree = "<group>"; };
 		6BE6452AF7A3C961097C3CEE /* socketPracticeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = socketPracticeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BE64712714E25E00A779ADE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
+		6BE64732B22A9F9683310BBE /* TYHSocketManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYHSocketManager.m; sourceTree = "<group>"; };
 		6BE64820CCF4E90B10D5ADB3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6BE648D0ADD274C1D08E01CE /* socketPractice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = socketPractice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BE6491107F69D17FF2CBA5E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		6BE64975675ACAF36DA19409 /* TYHSocketManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYHSocketManager.h; sourceTree = "<group>"; };
 		6BE64B3EB8FB9476421A9237 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6BE64C941C771E6603E8580E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		6BE64CED0FB3A96E34D658E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
@@ -102,6 +106,8 @@
 				6BE64A76D1B44BFEF6DFD746 /* Main.storyboard */,
 				6BE6416E51A0401CD72BDF90 /* ViewController.h */,
 				6BE642BDAC3D26BFD2C667D9 /* ViewController.m */,
+				6BE64732B22A9F9683310BBE /* TYHSocketManager.m */,
+				6BE64975675ACAF36DA19409 /* TYHSocketManager.h */,
 			);
 			path = socketPractice;
 			sourceTree = "<group>";
@@ -270,6 +276,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6BE64C95149B9B1BDDFBD349 /* socketPracticeTests.m in Sources */,
+				6BE64CCC4C0AE18CE8BEED1B /* TYHSocketManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,6 +287,7 @@
 				6BE647D0693CDA7981F8108C /* main.m in Sources */,
 				6BE649DE1EF488A27FDB2901 /* AppDelegate.m in Sources */,
 				6BE64A9A3F3A624DBAE3A3CB /* ViewController.m in Sources */,
+				6BE64B1A7AC3A9C103E3EDD2 /* TYHSocketManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
