@@ -7,14 +7,23 @@
 //
 
 #import "ViewController.h"
+#import "TYHSocketManager.h"
 
 
 @interface ViewController()
-
+@property (nonatomic, strong) TYHSocketManager *socket;
 @property (nonatomic, strong) UITextField *msgBox;
 @end
 
 @implementation ViewController
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.socket = [TYHSocketManager share];
+    }
+    return self;
+}
+
 - (void)loadView {
     [super loadView];
     UITextField *msgBox = [[UITextField alloc] initWithFrame:CGRectMake(0, 50, 100, 30)];
@@ -42,15 +51,15 @@
 }
 
 - (void)send {
-
+    [self.socket sendMsg:self.msgBox.text];
 }
 
 - (void)connect {
-
+    [self.socket connect];
 }
 
 - (void)disconnect {
-
+    [self.socket disConnect];
 }
 
 - (void)viewDidLoad {
