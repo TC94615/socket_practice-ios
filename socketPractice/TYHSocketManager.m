@@ -3,6 +3,10 @@
 // Copyright (c) 2017 ___FULLUSERNAME___. All rights reserved.
 //
 
+/*
+ * http://www.jianshu.com/p/2dbb360886a8
+ * */
+
 #import "TYHSocketManager.h"
 
 #import <sys/types.h>
