@@ -7,7 +7,8 @@
 
 @interface TYHSocketManager : NSObject
 + (instancetype)share;
-- (void)connect;
+- (BOOL)connect;
 - (void)disConnect;
 - (void)sendMsg:(NSString *)msg;
+- (void)pullTheMsg;
 @end
