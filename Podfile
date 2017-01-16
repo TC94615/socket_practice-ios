@@ -6,6 +6,7 @@ target 'socketPractice' do
   # use_frameworks!
   pod 'CocoaAsyncSocket', '~> 7.5'
   pod 'SocketRocket', '~> 0.5'
+  pod 'MQTTKit', '~> 0.1'
   # Pods for socketPractice
 
   target 'socketPracticeTests' do
