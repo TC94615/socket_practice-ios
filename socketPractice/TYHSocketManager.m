@@ -8,14 +8,25 @@
  * */
 
 #import "TYHSocketManager.h"
-#import "GCDAsyncSocket.h" // for TCP
+#import "SocketRocket.h"
+
+#define dispatch_main_async_safe(block)\
+    if ([NSThread isMainThread]) {\
+        block();\
+    } else {\
+        dispatch_async(dispatch_get_main_queue(), block);\
+    }
 
 static  NSString * Khost = @"127.0.0.1";
 static const uint16_t Kport = 6969;
 
-@interface TYHSocketManager()<GCDAsyncSocketDelegate>
+
+@interface TYHSocketManager()<SRWebSocketDelegate>
 {
-    GCDAsyncSocket *gcdSocket;
+    SRWebSocket *webSocket;
+    NSTimer *heartBeat;
+    NSTimeInterval reConnectTime;
+
 }
 
 @end
@@ -33,95 +44,183 @@ static const uint16_t Kport = 6969;
     return instance;
 }
 
+//初始化连接
 - (void)initSocket
 {
-    gcdSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
+    if (webSocket) {
+        return;
+    }
+
+
+    webSocket = [[SRWebSocket alloc]initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"ws://%@:%d", Khost, Kport]]];
+
+    webSocket.delegate = self;
+
+    //设置代理线程queue
+    NSOperationQueue *queue = [[NSOperationQueue alloc]init];
+    queue.maxConcurrentOperationCount = 1;
+
+    [webSocket setDelegateOperationQueue:queue];
+
+    //连接
+    [webSocket open];
+
 
 }
+
+//初始化心跳
+- (void)initHeartBeat
+{
+
+    dispatch_main_async_safe(^{
+
+        [self destoryHeartBeat];
+
+        __weak typeof(self) weakSelf = self;
+        //心跳设置为3分钟，NAT超时一般为5分钟
+        heartBeat = [NSTimer scheduledTimerWithTimeInterval:3*60 repeats:YES block:^(NSTimer * _Nonnull timer) {
+            NSLog(@"heart");
+            //和服务端约定好发送什么作为心跳标识，尽可能的减小心跳包大小
+            [weakSelf sendMsg:@"heart"];
+        }];
+        [[NSRunLoop currentRunLoop]addTimer:heartBeat forMode:NSRunLoopCommonModes];
+    })
+
+}
+
+//取消心跳
+- (void)destoryHeartBeat
+{
+    dispatch_main_async_safe(^{
+        if (heartBeat) {
+            [heartBeat invalidate];
+            heartBeat = nil;
+        }
+    })
+
+}
+
 
 #pragma mark - 对外的一些接口
 
 //建立连接
-- (BOOL)connect
+- (void)connect
 {
-    return  [gcdSocket connectToHost:Khost onPort:Kport error:nil];
+    [self initSocket];
+
+    //每次正常连接的时候清零重连时间
+    reConnectTime = 0;
 }
 
 //断开连接
 - (void)disConnect
 {
-    [gcdSocket disconnect];
+
+    if (webSocket) {
+        [webSocket close];
+        webSocket = nil;
+    }
 }
 
 
 //发送消息
 - (void)sendMsg:(NSString *)msg
-
 {
-    NSData *data  = [msg dataUsingEncoding:NSUTF8StringEncoding];
-    //第二个参数，请求超时时间
-    [gcdSocket writeData:data withTimeout:-1 tag:110];
+    [webSocket send:msg];
 
 }
 
-//监听最新的消息
-- (void)pullTheMsg
+//重连机制
+- (void)reConnect
 {
-    //监听读数据的代理  -1永远监听，不超时，但是只收一次消息，
-    //所以每次接受到消息还得调用一次
-    [gcdSocket readDataWithTimeout:-1 tag:110];
+    [self disConnect];
+
+    //超过一分钟就不再重连 所以只会重连5次 2^5 = 64
+    if (reConnectTime > 64) {
+        return;
+    }
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(reConnectTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        webSocket = nil;
+        [self initSocket];
+    });
+
+
+    //重连时间2的指数级增长
+    if (reConnectTime == 0) {
+        reConnectTime = 2;
+    }else{
+        reConnectTime *= 2;
+    }
 
 }
 
-#pragma mark - GCDAsyncSocketDelegate
-//连接成功调用
-- (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port
-{
-    NSLog(@"连接成功,host:%@,port:%d",host,port);
 
-    [self pullTheMsg];
+//pingPong
+- (void)ping{
 
-    //心跳写在这...
+    [webSocket sendPing:nil];
 }
 
-//断开连接的时候调用
-- (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(nullable NSError *)err
-{
-    NSLog(@"断开连接,host:%@,port:%d",sock.localHost,sock.localPort);
 
-    //断线重连写在这...
+
+#pragma mark - SRWebSocketDelegate
+
+- (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message
+{
+    NSLog(@"服务器返回收到消息:%@",message);
+}
+
+
+- (void)webSocketDidOpen:(SRWebSocket *)webSocket
+{
+    NSLog(@"连接成功");
+
+    //连接成功了开始发送心跳
+    [self initHeartBeat];
+}
+
+//open失败的时候调用
+- (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error
+{
+    NSLog(@"连接失败.....\n%@",error);
+
+    //失败了就去重连
+    [self reConnect];
+}
+
+//网络连接中断被调用
+- (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
+{
+
+    NSLog(@"被关闭连接，code:%ld,reason:%@,wasClean:%d",code,reason,wasClean);
+
+    //如果是被用户自己中断的那么直接断开连接，否则开始重连
+    if (code == disConnectByUser) {
+        [self disConnect];
+    }else{
+
+        [self reConnect];
+    }
+    //断开连接时销毁心跳
+    [self destoryHeartBeat];
 
 }
 
-//写成功的回调
-- (void)socket:(GCDAsyncSocket*)sock didWriteDataWithTag:(long)tag
+//sendPing的时候，如果网络通的话，则会收到回调，但是必须保证ScoketOpen，否则会crash
+- (void)webSocket:(SRWebSocket *)webSocket didReceivePong:(NSData *)pongPayload
 {
-//    NSLog(@"写的回调,tag:%ld",tag);
+    NSLog(@"收到pong回调");
+
 }
 
-//收到消息的回调
-- (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
-{
 
-    NSString *msg = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-    NSLog(@"收到消息：%@",msg);
-
-    [self pullTheMsg];
-}
-
-//分段去获取消息的回调
-//- (void)socket:(GCDAsyncSocket *)sock didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag
+//将收到的消息，是否需要把data转换为NSString，每次收到消息都会被调用，默认YES
+//- (BOOL)webSocketShouldConvertTextFrameToString:(SRWebSocket *)webSocket
 //{
+//    NSLog(@"webSocketShouldConvertTextFrameToString");
 //
-//    NSLog(@"读的回调,length:%ld,tag:%ld",partialLength,tag);
-//
-//}
-
-//为上一次设置的读取数据代理续时 (如果设置超时为-1，则永远不会调用到)
-//-(NSTimeInterval)socket:(GCDAsyncSocket *)sock shouldTimeoutReadWithTag:(long)tag elapsed:(NSTimeInterval)elapsed bytesDone:(NSUInteger)length
-//{
-//    NSLog(@"来延时，tag:%ld,elapsed:%f,length:%ld",tag,elapsed,length);
-//    return 10;
+//    return NO;
 //}
 
 @end

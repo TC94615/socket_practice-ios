@@ -5,10 +5,16 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum : NSUInteger {
+    disConnectByUser ,
+    disConnectByServer,
+} DisConnectType;
+
+
 @interface TYHSocketManager : NSObject
 + (instancetype)share;
-- (BOOL)connect;
+- (void)connect;
 - (void)disConnect;
 - (void)sendMsg:(NSString *)msg;
-- (void)pullTheMsg;
+- (void)ping;
 @end
