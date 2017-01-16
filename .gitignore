@@ -23,3 +23,6 @@ Pods
 
 #fastlane
 fastlane/report.xml
+
+#npm
+server/node_modules/
