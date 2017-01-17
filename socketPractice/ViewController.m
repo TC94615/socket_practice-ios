@@ -7,11 +7,11 @@
 //
 
 #import "ViewController.h"
-#import "TYHSocketManager.h"
+#import "MQTTManager.h"
 
 
 @interface ViewController()
-@property (nonatomic, strong) TYHSocketManager *socket;
+@property (nonatomic, strong) MQTTManager *mqttManager;
 @property (nonatomic, strong) UITextField *msgBox;
 @end
 
@@ -19,7 +19,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.socket = [TYHSocketManager share];
+        self.mqttManager = [MQTTManager share];
     }
     return self;
 }
@@ -51,15 +51,15 @@
 }
 
 - (void)send {
-    [self.socket sendMsg:self.msgBox.text];
+    [self.mqttManager sendMsg:self.msgBox.text];
 }
 
 - (void)connect {
-    [self.socket connect];
+    [self.mqttManager connect];
 }
 
 - (void)disconnect {
-    [self.socket disConnect];
+    [self.mqttManager disConnect];
 }
 
 - (void)viewDidLoad {
