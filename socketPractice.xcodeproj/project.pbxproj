@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		426EDFB8E67057B6485BB7A3 /* libPods-socketPracticeUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A0B0424971DEA90968DC261 /* libPods-socketPracticeUITests.a */; };
 		6BE6416C091E1C5D6C1EFC29 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6BE647F6E48A2B9D738AB834 /* LaunchScreen.storyboard */; };
+		6BE642A94F40D4C0FB439E6D /* MQTTManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BE64C81C94F6D44C4D90FB3 /* MQTTManager.m */; };
+		6BE642D2DF66023950ADF690 /* MQTTManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BE64C81C94F6D44C4D90FB3 /* MQTTManager.m */; };
 		6BE6435B87D533814EACDEEF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6BE64A76D1B44BFEF6DFD746 /* Main.storyboard */; };
 		6BE64380367AFC9A296D6AB9 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6BE64C941C771E6603E8580E /* Info.plist */; };
 		6BE646B1572D782F257FC43C /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6BE64712714E25E00A779ADE /* Info.plist */; };
@@ -62,7 +64,9 @@
 		6BE648D0ADD274C1D08E01CE /* socketPractice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = socketPractice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BE6491107F69D17FF2CBA5E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		6BE64975675ACAF36DA19409 /* TYHSocketManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYHSocketManager.h; sourceTree = "<group>"; };
+		6BE64AD549EDC637B81F26D1 /* MQTTManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTManager.h; sourceTree = "<group>"; };
 		6BE64B3EB8FB9476421A9237 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		6BE64C81C94F6D44C4D90FB3 /* MQTTManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTManager.m; sourceTree = "<group>"; };
 		6BE64C941C771E6603E8580E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		6BE64CED0FB3A96E34D658E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		84DA182E66618B780C4B3EFA /* Pods-socketPracticeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-socketPracticeTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-socketPracticeTests/Pods-socketPracticeTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -123,6 +127,8 @@
 				6BE642BDAC3D26BFD2C667D9 /* ViewController.m */,
 				6BE64732B22A9F9683310BBE /* TYHSocketManager.m */,
 				6BE64975675ACAF36DA19409 /* TYHSocketManager.h */,
+				6BE64C81C94F6D44C4D90FB3 /* MQTTManager.m */,
+				6BE64AD549EDC637B81F26D1 /* MQTTManager.h */,
 			);
 			path = socketPractice;
 			sourceTree = "<group>";
@@ -260,7 +266,7 @@
 		6BE64299D8A35753F85B01F5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				ORGANIZATIONNAME = ___FULLUSERNAME___;
+				ORGANIZATIONNAME = "___FULLUSERNAME___";
 			};
 			buildConfigurationList = 6BE64D73E55AF2FD99475808 /* Build configuration list for PBXProject "socketPractice" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -464,6 +470,7 @@
 			files = (
 				6BE64C95149B9B1BDDFBD349 /* socketPracticeTests.m in Sources */,
 				6BE64CCC4C0AE18CE8BEED1B /* TYHSocketManager.m in Sources */,
+				6BE642A94F40D4C0FB439E6D /* MQTTManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -475,6 +482,7 @@
 				6BE649DE1EF488A27FDB2901 /* AppDelegate.m in Sources */,
 				6BE64A9A3F3A624DBAE3A3CB /* ViewController.m in Sources */,
 				6BE64B1A7AC3A9C103E3EDD2 /* TYHSocketManager.m in Sources */,
+				6BE642D2DF66023950ADF690 /* MQTTManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
